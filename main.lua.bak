@@ -1,0 +1,16 @@
+local arr = {
+	apples = { 0, "a", "red", 5 },
+	oranges = { 1, "o", "orange", 12 },
+	pears = { 2, "p", "green", 7 },
+}
+
+local grid = {}
+
+function FillGrid(refGrid) end
+
+function love.load()
+	-- Iterate over all key-value pairs in the 'arr' table
+	for k, v in pairs(arr) do
+		print(k, v[1], v[2], v[3], v[4])
+	end
+end
