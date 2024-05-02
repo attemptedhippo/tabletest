@@ -34,6 +34,7 @@ local child3 = Node.new("Child 3", "Yellow")
 local child4 = Node.new("Child 4", "Green")
 local child5 = Node.new("Child 5", "Green")
 local child6 = Node.new("Child 6", "Yellow")
+local child7 = Node.new("Child 7", "Yellow")
 
 root:addChild(child1)
 root:addChild(child2)
