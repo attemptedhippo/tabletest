@@ -61,16 +61,44 @@ local function printTree(node, depth)
 end
 
 local function drawDial(node)
+	local screenWidth = love.graphics.getWidth()
+	local screenHeight = love.graphics.getHeight()
+	local bottomOfScreenPadding = 20
 	local panelHeight = 150
-	local offsetSides = love.graphics.getWidth() / 5 --) - 20
-	-- local offsetTop = love.graphics.getHeight() / 5
-	local offsetTop = love.graphics.getHeight() - panelHeight - 20
-	love.graphics.setColor(love.math.colorFromBytes(44, 47, 51))
-	love.graphics.rectangle("fill", offsetSides - 20, offsetTop, offsetSides * 3 + 40, panelHeight)
+	local panelPadding = 5
+	local panelMargin = 10
+	local offsetSides = screenWidth / 5
+	local offsetTop = screenHeight - panelHeight - bottomOfScreenPadding -- - panelMargin * 2
+	local computedWidth = screenWidth - offsetSides * 2 - panelMargin * 2
 
-	local tempString = CurrentNode.data2
-	love.graphics.setColor(MyColors[tempString])
-	love.graphics.print(node.data4, love.graphics.getWidth() / 2, 200)
+	love.graphics.setColor(love.math.colorFromBytes(44, 47, 51))
+	love.graphics.rectangle(
+		"fill",
+		offsetSides - panelMargin,
+		offsetTop - panelMargin,
+		computedWidth + panelMargin * 2,
+		panelHeight + panelMargin + panelPadding
+	)
+
+	suit.layout:reset(offsetSides, offsetTop, panelPadding)
+	love.graphics.setColor(MyColors[CurrentNode.data2])
+	love.graphics.print(node.data4, screenWidth / 2, 200)
+	local x, y, w, h = suit.layout:row(computedWidth, panelHeight * 0.75)
+	love.graphics.printf(node.data4, x, y, w, "left")
+	love.graphics.rectangle("line", x, y, w, h)
+
+	--300, 100) --0.75 * panelHeight)
+	-- suit.Label(node.data4, { align = "left" }, suit.layout:row(offsetSides * 3 + 40, panelHeight * 0.75))
+	suit.layout:push(suit.layout:row(0, panelHeight * 0.25))
+	-- love.graphics.rectangle("line", suit.layout:size())
+	if suit.Button("Bueton", suit.layout:col((computedWidth - 2 * panelPadding) / 3, 30)).hit then
+		CurrentNode = CurrentNode.children[1]
+	end
+	suit.layout:col()
+	if suit.Button("Bueton2", suit.layout:col()).hit then
+		CurrentNode = CurrentNode.children[2]
+	end
+	suit.layout:pop()
 end
 
 local function drawTree(node)
@@ -80,22 +108,11 @@ local function drawTree(node)
 end
 
 function love.load()
-	print("\n")
-	printTree(root)
+	-- print("\n")
+	-- printTree(root)
 end
 
-function love.update(dt)
-	suit.layout:reset(0, 500)
-	suit.layout:col(love.graphics.getWidth() / 5, 30)
-	if suit.Button("Bueton", suit.layout:col()).hit then
-		CurrentNode = CurrentNode.children[1]
-	end
-	suit.layout:col()
-	if suit.Button("Bueton2", suit.layout:col()).hit then
-		CurrentNode = CurrentNode.children[2]
-	end
-	suit.layout:col()
-end
+function love.update(dt) end
 
 function love.draw()
 	drawTree(CurrentNode)
